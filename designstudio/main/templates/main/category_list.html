@@ -1,0 +1,19 @@
+{% extends "layout/basic.html" %}
+{% load bootstrap4 %}
+{% block content %}
+
+<h3>Список Категорий</h3>
+<a href="{% url 'main:category-create'%}" class="btn btn-info">Создать категорию</a>
+{% if category_list %}
+  {% for category in category_list %}
+    <div class="card">
+        <div>
+        {{ category }}
+        <a href="{% url 'main:category-delete' category.id %}">Удалить</a>
+        </div>
+    </div>
+  {% endfor %}
+  {% else %}
+  <p>Нет категорий.</p>
+  {% endif %}
+{% endblock %}

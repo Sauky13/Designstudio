@@ -1,0 +1,40 @@
+{% extends "layout/basic.html" %}
+{% block title %} Ваши заявки {% endblock %}
+
+{% block content %}
+    {% if request.user.is_staff %}
+        <h2>Все заявки</h2>
+    {% else %}
+        <h2>Ваши заявки</h2>
+    {% endif %}
+
+    {% if applications %}
+    <form method="get">
+        <select id="statusFilter" name="status_filter">
+            <option value="">Фильтр не выбран</option>
+            {% for code, name in status_choices %}
+                <option value="{{ code }}" {% if status_filter == code %} selected {% endif %}>
+                    {{ name }}
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Фильтровать</button>
+    </form><br>
+        <div class="card-columns">
+            {% for application in applications %}
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ application.image.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ application.title }}</h5>
+                        <p class="card-text">Дата создания заявки: {{ application.time_mark }}</p>
+                        <p class="card-text">Статус заявки: {{ application.get_status_display }}</p>
+                        <a href="{% url 'main:application_detail' application.id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>У вас пока нет заявок.</p>
+        <a href="{% url 'main:create_application' %}" class="btn btn-primary">Создать заявку?</a>
+    {% endif %}
+{% endblock %}

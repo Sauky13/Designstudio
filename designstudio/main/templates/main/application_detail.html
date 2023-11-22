@@ -1,0 +1,29 @@
+{% extends "layout/basic.html" %}
+{% block title %} Заявка {{ application.title }} {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Детали заявки: {{ application.title }}</h2>
+        </div>
+        <div class="card-body">
+            <img src="{{ application.image.url }}" alt="Image of {{ application.title }}">
+            <h5 class="card-title">{{ application.title }}</h5>
+            <p class="card-text"><strong>Описание:</strong> {{ application.description }}</p>
+            <p class="card-text"><strong>Категория:</strong> {{ application.category }}</p>
+            <p class="card-text"><strong>Дата создания:</strong> {{ application.time_mark }}</p>
+            <p class="card-text"><strong>Статус:</strong> {{ application.get_status_display }}</p>
+
+            {% if request.user.is_staff %}
+            <p class="card-text"><strong>Пользователь:</strong> {{ application.user }}</p>
+            <a href="{% url 'main:change_application_status' application.id %}" class="btn btn-info">Изменить статус</a>
+            {% endif %}
+
+            {% if request.user.is_staff or request.user == application.user %}
+            <a href="{% url 'main:application_delete' application.id %}" class="btn btn-danger">Удалить заявку</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends "layout/basic.html" %}
+
+{% block content %}
+ {% if user.is_authenticated %}
+  <div>
+      <h4>Количество ваших заявок, находящихся в статусе «Принято в работу»: {{ in_progress_count }}</h4>
+    <h4>Ваши последние 4 выполненые заявки</h4>
+    <div class="card-columns">
+      {% for application in completed_applications %}
+        <div class="card" style="width: 18rem;">
+          <img class="card-img-top" src="{{ application.image.url }}" alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">{{ application.title }}</h5>
+            <p class="card-text">Дата создания заявки: {{ application.time_mark }}</p>
+            <p class="card-text">Статус заявки: {{ application.get_status_display }}</p>
+            <a href="{% url 'main:application_detail' application.id %}" class="btn btn-primary">Подробнее</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% else %}
+    <h3>Зарегистрируйтесь или войдите чтобы увидеть эту страницу</h3>
+ {% endif %}
+{% endblock %}
+
+
+
+
+
